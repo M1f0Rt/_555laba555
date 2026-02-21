@@ -1,9 +1,7 @@
 plugins {
     java
     application
-    id("org.javamodularity.moduleplugin") version "1.8.15"
-    id("org.openjfx.javafxplugin") version "0.0.13"
-    id("org.beryx.jlink") version "2.25.0"
+    id("org.openjfx.javafxplugin") version "0.1.0"
 }
 
 group = "org.example"
@@ -13,51 +11,43 @@ repositories {
     mavenCentral()
 }
 
-val junitVersion = "5.12.1"
-
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
-    }
-}
-
-tasks.withType<JavaCompile> {
-    options.encoding = "UTF-8"
-}
-
-application {
-    mainModule.set("org.example._555laba555")
-    mainClass.set("org.example._555laba555.HelloApplication")
-}
-
 javafx {
-    version = "17.0.14"
-    modules = listOf("javafx.controls", "javafx.fxml")
+    version = "21"
+    modules = listOf("javafx.controls", "javafx.fxml", "javafx.graphics", "javafx.base")
 }
 
 dependencies {
+    // Gson
+    implementation("com.google.code.gson:gson:2.10.1")
+
+    // Дополнительные JavaFX библиотеки (если нужны)
     implementation("org.controlsfx:controlsfx:11.2.1")
-    implementation("com.dlsc.formsfx:formsfx-core:11.6.0") {
-        exclude(group = "org.openjfx")
-    }
-    implementation("net.synedra:validatorfx:0.6.1") {
-        exclude(group = "org.openjfx")
-    }
+    implementation("com.dlsc.formsfx:formsfx-core:11.6.0")
+    implementation("net.synedra:validatorfx:0.5.0")
     implementation("org.kordamp.ikonli:ikonli-javafx:12.3.1")
     implementation("org.kordamp.bootstrapfx:bootstrapfx-core:0.4.0")
-    testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
-    implementation("com.google.code.gson:gson:2.10.1")
+
+    // Тестирование
+    testImplementation(platform("org.junit:junit-bom:5.10.0"))
+    testImplementation("org.junit.jupiter:junit-jupiter")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
-tasks.withType<Test> {
+application {
+    mainClass.set("org.example._555laba555.HelloApplication")
+}
+
+tasks.withType<JavaExec> {
+    jvmArgs = listOf(
+        "--module-path", sourceSets.main.get().runtimeClasspath.asPath,
+        "--add-modules", "javafx.controls,javafx.fxml,javafx.graphics"
+    )
+}
+
+tasks.test {
     useJUnitPlatform()
-}
-
-jlink {
-    imageZip.set(layout.buildDirectory.file("/distributions/app-${javafx.platform.classifier}.zip"))
-    options.set(listOf("--strip-debug", "--compress", "2", "--no-header-files", "--no-man-pages"))
-    launcher {
-        name = "app"
-    }
+    jvmArgs = listOf(
+        "--module-path", sourceSets.main.get().runtimeClasspath.asPath,
+        "--add-modules", "javafx.controls,javafx.fxml,javafx.graphics"
+    )
 }

@@ -8,33 +8,20 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class HelloApplication extends Application {
+
     @Override
     public void start(Stage stage) {
-        Gson gson = new Gson();
-        String testJson = gson.toJson(new TestData("JavaFX App", 1));
+        stage.setTitle("JavaFX + Gson");
 
-        Label label = new Label("Gson тест: " + testJson);
+        Label label = new Label("Hello JavaFX!");
         VBox root = new VBox(label);
         Scene scene = new Scene(root, 300, 200);
 
         stage.setScene(scene);
-        stage.setTitle("JavaFX + Gson Test");
         stage.show();
-
-    }
-
-    static class TestData {
-        String name;
-        int version;
-        TestData(String name, int version) {
-            this.name = name;
-            this.version = version;
-        }
     }
 
     public static void main(String[] args) {
         launch(args);
     }
-
-
 }
