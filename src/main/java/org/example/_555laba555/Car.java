@@ -42,6 +42,7 @@ public class Car {
         }
         this.name = name;
     }
+    
     /**
      * Создаёт копию объекта Car
      * @return новый объект Car с теми же значениями полей

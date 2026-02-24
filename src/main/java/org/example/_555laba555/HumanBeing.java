@@ -330,6 +330,7 @@ public class HumanBeing implements Comparable<HumanBeing> {
                 weaponType, mood, car);
     }
 
+
     /**
      * Сравнивает двух человек по дате занесения их данных в базу
      * @param o - объект с которым будет сравниваться другой

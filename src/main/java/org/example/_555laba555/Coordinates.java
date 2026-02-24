@@ -41,6 +41,7 @@ public class Coordinates {
     }
     //TODO подумть
 
+
     /**
      * Обновляет значение y
      * @throws IllegalArgumentException значение должно быть заполнено

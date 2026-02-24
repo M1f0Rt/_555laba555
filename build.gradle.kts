@@ -16,6 +16,7 @@ javafx {
     modules = listOf("javafx.controls", "javafx.fxml", "javafx.graphics", "javafx.base")
 }
 
+
 dependencies {
     // CSV
     implementation("com.opencsv:opencsv:5.9")
