@@ -8,16 +8,16 @@ public class ProgramState {
 
     private static final String DATA_FILE = "lab5_data.csv";
 
-    private List<Reagent> reagents = new ArrayList<>();
-    private List<ReagentBatch> batches = new ArrayList<>();
-    private List<StockMove> moves = new ArrayList<>();
+    private static List<Reagent> reagents = new ArrayList<>();
+    private static List<ReagentBatch> batches = new ArrayList<>();
+    private static List<StockMove> moves = new ArrayList<>();
 
     public ProgramState() {
         loadState();
     }
 
     // СОХРАНЕНИЕ
-    public void saveState() {
+    public static void saveState() {
         try (CSVWriter writer = new CSVWriter(new FileWriter(DATA_FILE))) {
 
             writer.writeNext(new String[]{"[REAGENTS]"});
@@ -172,7 +172,7 @@ public class ProgramState {
     }
 
     // Методы для работы с данными
-    public void addReagent(Reagent r) {
+    public static void addReagent(Reagent r) {
         reagents.add(r);
         saveState();
     }
@@ -193,7 +193,7 @@ public class ProgramState {
     }
 
     // Геттеры
-    public List<Reagent> getReagents() { return reagents; }
+    public static List<Reagent> getReagents() { return reagents; }
     public List<ReagentBatch> getBatches() { return batches; }
     public List<StockMove> getMoves() { return moves; }
 }
