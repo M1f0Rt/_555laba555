@@ -586,9 +586,6 @@ public class CommandHandler {
         }
     }
 
-    /**
-     * Обрезает строку до указанной длины.
-     */
     private String truncate(String s, int max) {
         if (s == null) return "";
         if (s.length() <= max) return s;
