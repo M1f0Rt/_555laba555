@@ -553,7 +553,12 @@ public class CommandHandler {
         List<ReagentBatch> batches = services.getBatchService().getAll();
         List<Reagent> reagents = services.getReagentService().getAll();
 
-        long active = batches.stream().filter(b -> b.getStatus() == BatchStatus.ACTIVE).count();
+        long active = 0;
+        for (ReagentBatch b : batches) {
+            if (b.getStatus() == BatchStatus.ACTIVE) {
+                active++;
+            }
+        }
         long archived = batches.size() - active;
 
         System.out.println("\n=== ОТЧЕТ ПО СКЛАДУ ===");
