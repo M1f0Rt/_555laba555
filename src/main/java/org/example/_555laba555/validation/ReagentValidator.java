@@ -34,8 +34,11 @@ public class ReagentValidator {
 
         String formula = reagent.getFormula();
         if (formula != null && formula.length() > MAX_FORMULA_LENGTH) {
-            throw new ValidationException("Формула слишком длинная (макс. " + MAX_FORMULA_LENGTH + ")");
+            throw new ValidationException("Формула слишком длинная (макс. " + MAX_FORMULA_LENGTH + ")");}
+        if (formula == null){
+            throw new ValidationException("Формула не должна быть пустой ");
         }
+
 
         String cas = reagent.getCas();
         if (cas != null && cas.length() > MAX_CAS_LENGTH) {
