@@ -65,4 +65,31 @@ public class ReagentService {
         return items.isEmpty();
     }
 
+    /**
+     * Используется при работе с файлами
+     */
+    public void loadFromList(List<Reagent> list) {
+        items.clear();
+        for (Reagent r : list) {
+            items.put(r.getId(), r);
+            if (r.getId() >= nextId) {
+                nextId = r.getId() + 1;
+            }
+        }
+    }
+    public void update(Reagent reagent) {
+        if (!items.containsKey(reagent.getId())) {
+            throw new ValidationException("Реактив не найден");
+        }
+        reagent.setUpdatedAt(Instant.now());
+        ReagentValidator.validate(reagent);
+        items.put(reagent.getId(), reagent);
+    }
+
+    public void remove(long id) {
+        if (!items.containsKey(id)) {
+            throw new ValidationException("Реактив не найден");
+        }
+        items.remove(id);
+    }
 }

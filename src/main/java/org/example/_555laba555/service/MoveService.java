@@ -69,4 +69,17 @@ public class MoveService {
         }
         return all;
     }
+    public ArrayList<StockMove> getAll() {
+        return new ArrayList<>(items.values());
+    }
+    public void loadFromList(List<StockMove> list) {
+        items.clear();  // очищаем старые данные
+        for (StockMove m : list) {
+            items.put(m.getId(), m);
+            // обновляем счетчик ID, чтобы новые объекты не пересекались
+            if (m.getId() >= nextId) {
+                nextId = m.getId() + 1;
+            }
+        }
+    }
 }

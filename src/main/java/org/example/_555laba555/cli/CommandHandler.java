@@ -3,6 +3,8 @@ package org.example._555laba555.cli;
 import org.example._555laba555.domain.*;
 import org.example._555laba555.service.ServiceManager;
 import org.example._555laba555.validation.ValidationException;
+import org.example._555laba555.fileManager.Conservation;
+import org.example._555laba555.fileManager.StorageException;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.time.Instant;
@@ -19,6 +21,8 @@ import java.util.Map;
 public class CommandHandler {
     /** Менеджер сервисов для доступа к данным */
     private final ServiceManager services;
+    /** Менеджер для работы с файлами **/
+    private final Conservation storage;
     /** Помощник для чтения ввода */
     private final InputHelper input;
     private boolean running;
@@ -27,8 +31,9 @@ public class CommandHandler {
     /**
      * Создает обработчик команд и загружает данные из файла.
      */
-    public CommandHandler(ServiceManager services) {
+    public CommandHandler(ServiceManager services, Conservation storage) {
         this.services = services;
+        this.storage = storage;
         this.input = new InputHelper(new BufferedReader(new InputStreamReader(System.in)));
         this.running = true;
         initCommands();
@@ -46,6 +51,8 @@ public class CommandHandler {
         commands.put("batch_update", args -> updateBatch(args));
         commands.put("batch_archive", args -> archiveBatch(args));
         commands.put("stock_report", args -> stockReport(args));
+        commands.put("save", args -> saveData());
+        commands.put("load", args -> loadData(args));
     }
 
     /**
@@ -56,7 +63,6 @@ public class CommandHandler {
         System.out.println("Введите help для списка команд");
         while (running) {
             try {
-                System.out.print("> ");
                 String line = input.readString("", false);
                 if (line.isEmpty()) continue;
 
@@ -78,7 +84,34 @@ public class CommandHandler {
             }
         }
     }
-
+    /**
+     * Сохраняет данные в файл.
+     */
+    private void saveData() {
+        try {
+            storage.save(services);
+            System.out.println("Данные сохранены");
+        } catch (StorageException e) {
+            System.out.println("Ошибка сохранения: " + e.getMessage());
+        }
+    }
+    /**
+     * Загружает данные из файла.
+     */
+    private void loadData(String args) {
+        try {
+            if (args.trim().isEmpty()) {
+                storage.load(services);
+                System.out.println("Данные загружены");
+            } else {
+                Conservation customStorage = new Conservation(args.trim());
+                customStorage.load(services);
+                System.out.println("Данные загружены из: " + args);
+            }
+        } catch (StorageException e) {
+            System.out.println("Ошибка загрузки: " + e.getMessage());
+        }
+    }
     /**
      * Показывает список доступных команд.
      */
@@ -102,6 +135,12 @@ public class CommandHandler {
      * Завершает работу программы с сохранением данных.
      */
     private void exit()  {
+        try {
+            storage.save(services);
+            System.out.println("Данные сохранены");
+        } catch (StorageException e) {
+            System.out.println("Ошибка сохранения при выходе: " + e.getMessage());
+        }
         System.out.println("До свидания!");
         running = false;
     }

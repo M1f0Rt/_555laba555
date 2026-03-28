@@ -90,6 +90,18 @@ public class BatchService {
     }
 
     /**
+     *Используется при работе с файлами
+     */
+    public void loadFromList(List<ReagentBatch> list) {
+        items.clear();
+        for (ReagentBatch b : list) {
+            items.put(b.getId(), b);
+            if (b.getId() >= nextId) {
+                nextId = b.getId() + 1;
+            }
+        }
+    }
+    /**
      * Проверяет, существует ли партия с указанным ID.
      */
     public boolean exists(long id) {
