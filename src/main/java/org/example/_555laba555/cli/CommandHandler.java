@@ -5,6 +5,7 @@ import org.example._555laba555.service.ServiceManager;
 import org.example._555laba555.validation.ValidationException;
 import org.example._555laba555.fileManager.Conservation;
 import org.example._555laba555.fileManager.StorageException;
+import org.example._555laba555.UI.ReagentUI;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.time.Instant;
@@ -53,6 +54,7 @@ public class CommandHandler {
         commands.put("stock_report", args -> stockReport(args));
         commands.put("save", args -> saveData());
         commands.put("load", args -> loadData(args));
+        commands.put("ui", args -> launchUI());
     }
 
     /**
@@ -83,6 +85,26 @@ public class CommandHandler {
                 System.out.println("Ошибка: " + e.getMessage());
             }
         }
+    }
+    private void launchUI() {
+        System.out.println("Запуск графического интерфейса...");
+        System.out.println("Консольный режим будет закрыт.");
+        try {
+            storage.save(services);
+            System.out.println("Данные сохранены");
+        } catch (StorageException e) {
+            System.out.println("Ошибка сохранения: " + e.getMessage());
+        }
+        System.out.println("Закрытие консоли...");
+        running = false;
+        new Thread(() -> {
+            try {
+                ReagentUI.main(new String[0]);
+            } catch (Exception e) {
+                System.out.println("Ошибка запуска интерфейса: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }).start();
     }
     /**
      * Сохраняет данные в файл.
@@ -128,7 +150,8 @@ public class CommandHandler {
         System.out.println("  batch_archive <ID>      - архивировать партию");
         System.out.println("  stock_report [--exp-before ДАТА] - отчет по складу");
         System.out.println("  help                    - показать эту справку");
-        System.out.println("  exit                    - выход из программы\n");
+        System.out.println("  save                    - сохраняет в ранее загруженный файл");
+        System.out.println("  help                    - загружает файл в случае отсутствия создает новый\n");
     }
 
     /**
