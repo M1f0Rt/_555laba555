@@ -67,7 +67,6 @@ public class CommandHandler {
             try {
                 String line = input.readString("", false);
                 if (line.isEmpty()) continue;
-
                 String[] parts = line.split("\\s+", 2);
                 String commandName = parts[0].toLowerCase();
                 String args = parts.length > 1 ? parts[1] : "";
@@ -86,6 +85,7 @@ public class CommandHandler {
             }
         }
     }
+    //пока не работает (работает но не так как надо)
     private void launchUI() {
         System.out.println("Запуск графического интерфейса...");
         System.out.println("Консольный режим будет закрыт.");
@@ -151,7 +151,7 @@ public class CommandHandler {
         System.out.println("  stock_report [--exp-before ДАТА] - отчет по складу");
         System.out.println("  help                    - показать эту справку");
         System.out.println("  save                    - сохраняет в ранее загруженный файл");
-        System.out.println("  help                    - загружает файл в случае отсутствия создает новый\n");
+        System.out.println("  load [ФАЙЛ]             - загружает файл в случае отсутствия создает новый\n");
     }
 
     /**
@@ -240,7 +240,10 @@ public class CommandHandler {
 
         LocalDate expires = input.readDate("Срок годности (ГГГГ-ММ-ДД, пусто если нет): ");
         if (expires != null) {
-            b.setExpiresAt(expires.atStartOfDay(ZoneOffset.UTC).toInstant());
+            if(expires.isBefore(LocalDate.now())){
+                System.out.println("Реактив добавлен с полем даты null, т.к. срок годности уже вышел");
+            }else{
+            b.setExpiresAt(expires.atStartOfDay(ZoneOffset.UTC).toInstant());}
         }
 
         int statusChoice;

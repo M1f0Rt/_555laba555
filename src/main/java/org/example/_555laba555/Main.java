@@ -11,13 +11,12 @@ public class Main {
         // Парсим аргументы командной строки
         String dataFile = parseDataFile(args);
 
-        // Создаем менеджер сервисов (общий для всех режимов)
+        // Создаем менеджер сервисов
         ServiceManager services = new ServiceManager();
 
         // Создаем менеджер сохранения
         Conservation storage = new Conservation(dataFile);
-
-        // Загружаем данные из файла при старте
+        // Загружаем данные из файл при старте
         try {
             storage.load(services);
             System.out.println("Данные загружены из: " + dataFile);

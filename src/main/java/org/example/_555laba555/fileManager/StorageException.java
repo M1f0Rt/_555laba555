@@ -7,7 +7,6 @@ public class StorageException extends Exception {
 
     /**
      * Создает исключение с сообщением об ошибке.
-     *
      */
     public StorageException(String message) {
         super(message);
@@ -15,7 +14,6 @@ public class StorageException extends Exception {
 
     /**
      * Создает исключение с сообщением и причиной.
-     *
      */
     public StorageException(String message, Throwable cause) {
         super(message, cause);

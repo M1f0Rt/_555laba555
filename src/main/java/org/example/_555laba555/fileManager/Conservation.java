@@ -294,7 +294,6 @@ public class Conservation {
 
     /**
      * Преобразует пустую строку в null.
-
      */
     private String emptyToNull(String s) {
         return (s == null || s.isEmpty()) ? null : s;
