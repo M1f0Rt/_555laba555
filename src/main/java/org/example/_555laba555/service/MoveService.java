@@ -58,16 +58,30 @@ public class MoveService {
      */
     public List<StockMove> getByBatchId(long batchId, int limit) {
         List<StockMove> all = getByBatchId(batchId);
-        all.sort((a, b) -> {
-            if (a.getMovedAt() == null) return 1;
-            if (b.getMovedAt() == null) return -1;
-            return b.getMovedAt().compareTo(a.getMovedAt());
-        });
+        int n = all.size();
+        for (int i = 0; i < n - 1; i++) {
+            int maxIdx = i;
+            for (int j = i + 1; j < n; j++) {
+                if (isNewerThan(all.get(j), all.get(maxIdx))) {
+                    maxIdx = j;
+                }
+            }
+            if (maxIdx != i) {
+                StockMove temp = all.get(i);
+                all.set(i, all.get(maxIdx));
+                all.set(maxIdx, temp);
+            }
+        }
 
         if (limit < all.size()) {
             return all.subList(0, limit);
         }
         return all;
+    }
+    public boolean isNewerThan(StockMove a, StockMove b){
+        if (a.getMovedAt() == null) return false;
+        if (b.getMovedAt() == null) return true;
+        return a.getMovedAt().compareTo(b.getMovedAt()) > 0;
     }
     public ArrayList<StockMove> getAll() {
         return new ArrayList<>(items.values());
