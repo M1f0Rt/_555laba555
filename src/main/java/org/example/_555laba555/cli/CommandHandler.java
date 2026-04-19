@@ -41,7 +41,7 @@ public class CommandHandler {
         commands.put("stock_report", new StockReportCommand());
         commands.put("save", new SaveCommand());
         commands.put("load", new LoadCommand());
-        commands.put("ui", new UiCommand());
+        commands.put("ui", new UiCommand());//не работает
     }
 
     public void run() {

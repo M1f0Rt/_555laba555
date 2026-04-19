@@ -33,7 +33,6 @@ public class Conservation {
     public void save(ServiceManager services) throws StorageException {
         try (CSVWriter writer = new CSVWriter(new FileWriter(dataFile))) {
 
-            // Секция реактивов
             writer.writeNext(new String[]{"[REAGENTS]"});
             for (Reagent r : services.getReagentService().getAll()) {
                 writer.writeNext(new String[]{
@@ -49,7 +48,6 @@ public class Conservation {
                 });
             }
 
-            // Секция партий
             writer.writeNext(new String[]{"[BATCHES]"});
             for (ReagentBatch b : services.getBatchService().getAll()) {
                 writer.writeNext(new String[]{
@@ -68,7 +66,6 @@ public class Conservation {
                 });
             }
 
-            // Секция движений
             writer.writeNext(new String[]{"[MOVES]"});
             for (StockMove m : services.getMoveService().getAll()) {
                 writer.writeNext(new String[]{
@@ -140,10 +137,8 @@ public class Conservation {
                 }
             }
 
-            // Проверяем целостность данных
             validateData(tempReagents, tempBatches, tempMoves);
 
-            // Загружаем данные в сервисы
             services.getReagentService().loadFromList(tempReagents);
             services.getBatchService().loadFromList(tempBatches);
             services.getMoveService().loadFromList(tempMoves);
@@ -253,8 +248,6 @@ public class Conservation {
      */
     private void validateData(List<Reagent> reagents, List<ReagentBatch> batches,
                               List<StockMove> moves) throws StorageException {
-
-        // Проверка ссылок партий на реактивы
         for (ReagentBatch b : batches) {
             boolean found = false;
             for (Reagent r : reagents) {
@@ -268,8 +261,6 @@ public class Conservation {
                         " ссылается на несуществующий реактив " + b.getReagentId());
             }
         }
-
-        // Проверка ссылок движений на партии
         for (StockMove m : moves) {
             boolean found = false;
             for (ReagentBatch b : batches) {

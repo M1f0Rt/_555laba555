@@ -36,7 +36,11 @@ public class BatchAddCommand implements Command {
 
         LocalDate expires = input.readDate("Срок годности (ГГГГ-ММ-ДД, пусто если нет): ");
         if (expires != null) {
-            b.setExpiresAt(expires.atStartOfDay(ZoneOffset.UTC).toInstant());
+            if (expires.isBefore(LocalDate.now())) {
+                System.out.println("Реактив добавлен с полем даты null, т.к. срок годности уже вышел");
+            } else {
+                b.setExpiresAt(expires.atStartOfDay(ZoneOffset.UTC).toInstant());
+            }
         }
 
         int statusChoice;

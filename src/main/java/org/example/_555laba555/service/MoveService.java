@@ -72,7 +72,6 @@ public class MoveService {
                 all.set(maxIdx, temp);
             }
         }
-
         if (limit < all.size()) {
             return all.subList(0, limit);
         }
@@ -96,3 +95,4 @@ public class MoveService {
         }
     }
 }
+//TODO отмена удаления
