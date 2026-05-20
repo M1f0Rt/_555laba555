@@ -25,6 +25,6 @@ public class HelpCommand implements Command {
         System.out.println("  load [путь]             - загрузить данные из файла");
         System.out.println("  help                    - показать эту справку");
         System.out.println("  exit                    - выход из программы");
-        System.out.println("  ui                      - пользовательский интерфейс\n");
+        System.out.println("  ui                      - пользовательский интерфейс(НЕ РАБОТАЕТ)\n");
     }
 }

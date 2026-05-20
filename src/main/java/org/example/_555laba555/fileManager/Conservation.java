@@ -21,7 +21,6 @@ public class Conservation {
 
     // конструктор по умолчанию
     public Conservation() { // для save/load
-
         this("records.csv");
     }
 

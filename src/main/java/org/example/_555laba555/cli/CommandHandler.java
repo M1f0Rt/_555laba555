@@ -46,11 +46,6 @@ public class CommandHandler {
         commands.put("batch_del", new BatchDelete());
         commands.put("history_show", new HistoryShow());
         commands.put("cancel_del", new DeletingOfDeleting());
-
-
-
-
-
     }
 
     public void run() {
