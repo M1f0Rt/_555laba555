@@ -1,12 +1,10 @@
 package org.example._555laba555.cli.commands;
 
-import javafx.application.Application;
 import org.example._555laba555.cli.Command;
 import org.example._555laba555.cli.InputHelper;
 import org.example._555laba555.service.ServiceManager;
 import org.example._555laba555.fileManager.Conservation;
-import org.example._555laba555.ui.mainpage;
-import org.example._555laba555.ui.launcher;
+
 import static javafx.application.Application.launch;
 
 public class UiCommand implements Command {

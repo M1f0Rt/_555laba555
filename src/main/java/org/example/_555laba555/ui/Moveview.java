@@ -1,5 +1,6 @@
 package org.example._555laba555.ui;
 
+import javafx.stage.Stage;
 import org.example._555laba555.service.ServiceManager;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
@@ -9,10 +10,10 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import org.example._555laba555.domain.StockMove;
 import org.example._555laba555.fileManager.Conservation;
-import org.example._555laba555.service.ServiceManager;
+import org.example._555laba555.ui.miniwindows.AddMoveDialog;
 
 
-public class moveview extends BorderPane {
+public class Moveview extends BorderPane { //BorderPane как раз и отвечает за нужную нам обстановку
     private final ServiceManager services;
     private final Conservation storage;
     private TableView<StockMove> table;
@@ -22,20 +23,21 @@ public class moveview extends BorderPane {
     private Label BatchIDVal = new Label();
     private Label TypeVal = new Label();
     private Label QuantityVal = new Label();
-    private Label UnitVal = new Label();
     private Label ReasonVal = new Label();
     private Label OwnerUsernameVal = new Label();
     private Label MovedAtVal = new Label();
     private Label CreatedAtVal = new Label();
 
-    public moveview(ServiceManager services, Conservation storage) {
+    public Moveview(ServiceManager services, Conservation storage) {
         this.services = services;
         this.storage = storage;
 
         //Панелька прослойка для команд
         Button refreshBtn = new Button("Обновить");
         refreshBtn.setOnAction(e -> refreshTable());
-        this.setTop(new ToolBar(refreshBtn));
+        Button addbtn = new Button("Добавит действие");
+        addbtn.setOnAction(e -> openAddMoveDiaog());
+        this.setTop(new ToolBar(refreshBtn,addbtn));
 
         //Список реагентов выводиться влевую фигню
         table = new TableView<>();
@@ -75,11 +77,13 @@ public class moveview extends BorderPane {
         SplitPane splitPane = new SplitPane(table, details);
         splitPane.setDividerPositions(0.3);
         this.setCenter(splitPane);
-
-        refreshTable();
     }
 
     private void refreshTable() {
         table.setItems(FXCollections.observableArrayList(services.getMoveService().getAll()));
+    }
+    private void openAddMoveDiaog(){
+        AddMoveDialog dialog = new AddMoveDialog(services,(Stage) this.getScene().getWindow());
+        dialog.showAndWait();
     }
 }

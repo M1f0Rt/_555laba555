@@ -3,15 +3,14 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.example._555laba555.fileManager.Conservation;
 import org.example._555laba555.service.ServiceManager;
 
 import java.io.File;
-
-public class mainpage extends Application {
+// Класс отвечающий за главную стрницу extends Application обязательна инициация init() и start() из реализованных прям здесь функций панелька ФАЙЛ + загруить сохранить
+public class Mainpage extends Application {
     private ServiceManager serviceManager;
     private Conservation conservation;
     private String currentFile;
@@ -23,6 +22,7 @@ public class mainpage extends Application {
         try{
             this.currentFile = "records.csv";
             this.conservation = new Conservation(currentFile);
+            this.conservation.load(serviceManager);
         }catch (Exception e){
             System.err.println("Ошибка загруски в lavafx: "+e.getMessage());
         }
@@ -34,7 +34,7 @@ public class mainpage extends Application {
 
         MenuBar menuBar =new MenuBar();
         Menu fileMnu = new Menu("ФАЙЛ");
-        MenuItem loadItem = new MenuItem("Загрузить файл");
+        MenuItem loadItem = new MenuItem("Загрузить");
         loadItem.setOnAction(e -> handleLoadFile());
 
         MenuItem saveItem = new MenuItem("Сохранить");
@@ -47,9 +47,9 @@ public class mainpage extends Application {
         root.setTop(menuBar);
 
         TabPane tabPane = new TabPane();
-        tabPane.getTabs().add(new Tab("Реактивы", new reagview(serviceManager, conservation)));
-        tabPane.getTabs().add(new Tab("Партии", new batchview(serviceManager, conservation)));
-        tabPane.getTabs().add(new Tab("Движения", new moveview(serviceManager, conservation)));
+        tabPane.getTabs().add(new Tab("Реактивы", new Reagview(serviceManager, conservation)));
+        tabPane.getTabs().add(new Tab("Партии", new Batchview(serviceManager, conservation)));
+        tabPane.getTabs().add(new Tab("Движения", new Moveview(serviceManager, conservation)));
         root.setCenter(tabPane);
 
         primaryStage.setScene(new Scene(root, 1000, 700));
@@ -78,11 +78,6 @@ public class mainpage extends Application {
     private void showError(String msg) {
         new Alert(Alert.AlertType.ERROR, msg).showAndWait();
     }
-
-    private void showInfo(String msg) {
-        new Alert(Alert.AlertType.INFORMATION, msg).showAndWait();
-    }
-
 
 
 }

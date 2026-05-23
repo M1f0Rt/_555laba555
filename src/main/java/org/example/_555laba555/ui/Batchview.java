@@ -8,12 +8,14 @@ import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
+import javafx.stage.Stage;
 import org.example._555laba555.domain.ReagentBatch;
 import org.example._555laba555.service.ServiceManager;
 import org.example._555laba555.fileManager.Conservation;
+import org.example._555laba555.ui.miniwindows.AddBatchDialog;
 
 
-public class batchview extends BorderPane {
+public class Batchview extends BorderPane {
     private final ServiceManager services;
     private final Conservation storage;
     private TableView<ReagentBatch> table;
@@ -28,14 +30,16 @@ public class batchview extends BorderPane {
     private Label StatusVal = new Label();
     private Label OwnerVal = new Label();
 
-    public batchview(ServiceManager services, Conservation storage) {
+    public Batchview(ServiceManager services, Conservation storage) {
         this.services = services;
         this.storage = storage;
 
         //Панелька прослойка для команд
         Button refreshBtn = new Button("Обновить");
         refreshBtn.setOnAction(e -> refreshTable());
-        this.setTop(new ToolBar(refreshBtn));
+        Button addBtn = new Button("Добавить партию");
+        addBtn.setOnAction(e -> openAddBatchDialog());
+        this.setTop(new ToolBar(refreshBtn, addBtn));
 
         //Список реагентов выводиться влевую фигню
         table = new TableView<>();
@@ -75,11 +79,14 @@ public class batchview extends BorderPane {
         SplitPane splitPane = new SplitPane(table, details);
         splitPane.setDividerPositions(0.3);
         this.setCenter(splitPane);
-
-        refreshTable();
     }
 
     private void refreshTable() {
         table.setItems(FXCollections.observableArrayList(services.getBatchService().getAll()));
+    }
+    private void openAddBatchDialog() {
+        AddBatchDialog dialog = new AddBatchDialog(services, (Stage) this.getScene().getWindow());
+        dialog.showAndWait();
+
     }
 }

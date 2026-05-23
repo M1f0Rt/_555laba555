@@ -7,12 +7,14 @@ import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
+import javafx.stage.Stage;
 import org.example._555laba555.domain.Reagent;
 import org.example._555laba555.service.ServiceManager;
 import org.example._555laba555.fileManager.Conservation;
+import org.example._555laba555.ui.miniwindows.AddReagentDialog;
 
 
-public class reagview extends BorderPane {
+public class Reagview extends BorderPane { //BorderPane как раз и отвечает за нужную нам обстановку
     private final ServiceManager services;
     private final Conservation storage;
     private TableView<Reagent> table;
@@ -24,15 +26,17 @@ public class reagview extends BorderPane {
     private Label casVal = new Label();
     private Label hazardVal = new Label();
 
-    public reagview(ServiceManager services, Conservation storage) {
+    public Reagview(ServiceManager services, Conservation storage) {
         this.services = services;
         this.storage = storage;
 
         //Панелька прослойка для команд
         Button refreshBtn = new Button("Обновить");
         refreshBtn.setOnAction(e -> refreshTable());
-        this.setTop(new ToolBar(refreshBtn));
         Button addreagBtn = new Button("Добавить реагент");
+        addreagBtn.setOnAction(e -> openAddReagentDialog());
+        this.setTop(new ToolBar(refreshBtn,addreagBtn));
+
 
         //Список реагентов выводиться влевую фигню
         table = new TableView<>();
@@ -65,13 +69,15 @@ public class reagview extends BorderPane {
         SplitPane splitPane = new SplitPane(table, details);
         splitPane.setDividerPositions(0.3);
         this.setCenter(splitPane);
-
-        refreshTable();
     }
 
     private void refreshTable() {
         table.setItems(FXCollections.observableArrayList(services.getReagentService().getAll()));
     }
+    private void openAddReagentDialog() {
+        AddReagentDialog dialog = new AddReagentDialog(services, (Stage) this.getScene().getWindow());
+        dialog.showAndWait();
 
+    }
 
 }
